@@ -21,7 +21,7 @@ const HomePage = () => {
       try {
         await supabase.from('extraction_history').insert({
           user_id: user.id,
-          text,
+          text: text,
           image_url: img,
           language: lang
         });

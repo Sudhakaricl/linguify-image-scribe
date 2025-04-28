@@ -10,6 +10,7 @@ import HistoryItem, { ExtractionHistoryItem } from '@/components/HistoryItem';
 const HistoryPage = () => {
   const { user } = useAuth();
   const [history, setHistory] = useState<ExtractionHistoryItem[]>([]);
+  const navigate = useNavigate();
   
   useEffect(() => {
     loadHistory();
@@ -29,7 +30,16 @@ const HistoryPage = () => {
       return;
     }
     
-    setHistory(data || []);
+    // Transform the Supabase data to match our ExtractionHistoryItem interface
+    const transformedData = data?.map(item => ({
+      id: item.id,
+      text: item.text,
+      imageUrl: item.image_url,
+      language: item.language,
+      timestamp: item.created_at
+    })) || [];
+    
+    setHistory(transformedData);
   };
   
   const handleDelete = async (id: string) => {
