@@ -1,37 +1,65 @@
 
-import React, { useEffect } from 'react';
-import AuthForm from '@/components/AuthForm';
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
+import { Card } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
 
-const SignupPage = () => {
-  const navigate = useNavigate();
-  
-  // Redirect if already logged in
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      navigate('/');
+export default function SignupPage() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const { signUp } = useAuth();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    
+    try {
+      await signUp(email, password);
+      toast.success('Account created successfully!');
+    } catch (error: any) {
+      toast.error(error.message || 'Failed to sign up');
+    } finally {
+      setLoading(false);
     }
-  }, [navigate]);
-  
+  };
+
   return (
-    <div className="min-h-screen flex flex-col">
-      <div className="flex flex-grow items-center justify-center p-4">
-        <div className="w-full max-w-md">
-          <h1 className="text-3xl font-bold text-center mb-6 text-indigo">
-            Text Extraction App
-          </h1>
-          <p className="text-center mb-8 text-gray-600">
-            Sign up to extract text from images
+    <div className="min-h-screen flex items-center justify-center p-4">
+      <Card className="w-full max-w-md p-8">
+        <h1 className="text-2xl font-bold text-center mb-6">Create an Account</h1>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium mb-1">Email</label>
+            <Input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1">Password</label>
+            <Input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          <Button type="submit" className="w-full" disabled={loading}>
+            {loading ? 'Creating account...' : 'Sign Up'}
+          </Button>
+          <p className="text-center text-sm">
+            Already have an account?{' '}
+            <a href="/login" className="text-blue-600 hover:underline">
+              Login
+            </a>
           </p>
-          <AuthForm type="signup" />
-        </div>
-      </div>
-      <footer className="py-4 text-center text-gray-500 text-sm border-t">
-        &copy; {new Date().getFullYear()} Text Extraction App
-      </footer>
+        </form>
+      </Card>
     </div>
   );
-};
-
-export default SignupPage;
+}
