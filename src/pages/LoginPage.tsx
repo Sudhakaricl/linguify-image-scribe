@@ -8,52 +8,73 @@ import { toast } from 'sonner';
 import { Link } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { supabase } from '@/integrations/supabase/client';
+import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
+import { Eye, EyeOff } from 'lucide-react';
+
+// Email login schema
+const emailLoginSchema = z.object({
+  email: z.string().email('Please enter a valid email address'),
+  password: z.string().min(1, 'Password is required'),
+});
+
+// Username login schema
+const usernameLoginSchema = z.object({
+  username: z.string().min(1, 'Username is required'),
+  password: z.string().min(1, 'Password is required'),
+});
+
+// Reset password schema
+const resetPasswordSchema = z.object({
+  email: z.string().email('Please enter a valid email address'),
+});
+
+type EmailLoginFormValues = z.infer<typeof emailLoginSchema>;
+type UsernameLoginFormValues = z.infer<typeof usernameLoginSchema>;
+type ResetPasswordFormValues = z.infer<typeof resetPasswordSchema>;
 
 export default function LoginPage() {
-  // Login states
-  const [email, setEmail] = useState('');
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
   const [loginMethod, setLoginMethod] = useState<'email' | 'username'>('email');
-  
-  // Reset password states
-  const [resetEmail, setResetEmail] = useState('');
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   
-  const { signIn } = useAuth();
+  const { signIn, resetPassword } = useAuth();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  // Email login form
+  const emailForm = useForm<EmailLoginFormValues>({
+    resolver: zodResolver(emailLoginSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
+
+  // Username login form
+  const usernameForm = useForm<UsernameLoginFormValues>({
+    resolver: zodResolver(usernameLoginSchema),
+    defaultValues: {
+      username: '',
+      password: '',
+    },
+  });
+
+  // Reset password form
+  const resetForm = useForm<ResetPasswordFormValues>({
+    resolver: zodResolver(resetPasswordSchema),
+    defaultValues: {
+      email: '',
+    },
+  });
+
+  const handleEmailLogin = async (values: EmailLoginFormValues) => {
     setLoading(true);
-    
     try {
-      if (loginMethod === 'email') {
-        await signIn(email, password);
-      } else {
-        // First find the user's email by username
-        const { data, error } = await supabase
-          .from('profiles')
-          .select('id')
-          .eq('username', username)
-          .single();
-          
-        if (error || !data) {
-          throw new Error('Username not found');
-        }
-        
-        // Get the user's email from auth.users (via a function or view since we can't directly query auth.users)
-        const { data: userData, error: userError } = await supabase.auth.getUser(data.id);
-        
-        if (userError || !userData.user) {
-          throw new Error('User not found');
-        }
-        
-        // Now login with the email
-        await signIn(userData.user.email!, password);
-      }
+      await signIn(values.email, values.password);
+      toast.success('Logged in successfully');
     } catch (error: any) {
       toast.error(error.message || 'Failed to sign in');
     } finally {
@@ -61,14 +82,41 @@ export default function LoginPage() {
     }
   };
 
-  const handleResetPassword = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsResetting(true);
-    
+  const handleUsernameLogin = async (values: UsernameLoginFormValues) => {
+    setLoading(true);
     try {
-      const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
-        redirectTo: window.location.origin + '/reset-password',
-      });
+      // First find the user's email by username
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('username', values.username)
+        .single();
+          
+      if (error || !data) {
+        throw new Error('Username not found');
+      }
+        
+      // Get the user's email from auth.users (via a function or view since we can't directly query auth.users)
+      const { data: userData, error: userError } = await supabase.auth.getUser(data.id);
+        
+      if (userError || !userData.user) {
+        throw new Error('User not found');
+      }
+        
+      // Now login with the email
+      await signIn(userData.user.email!, values.password);
+      toast.success('Logged in successfully');
+    } catch (error: any) {
+      toast.error(error.message || 'Failed to sign in');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResetPassword = async (values: ResetPasswordFormValues) => {
+    setIsResetting(true);
+    try {
+      const { error } = await resetPassword(values.email);
       
       if (error) throw error;
       
@@ -97,63 +145,126 @@ export default function LoginPage() {
           </TabsList>
           
           <TabsContent value="email">
-            <form onSubmit={handleSubmit} className="space-y-4 mt-4">
-              <div>
-                <label className="block text-sm font-medium mb-1 text-gray-700">Email</label>
-                <Input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full"
-                  required
+            <Form {...emailForm}>
+              <form onSubmit={emailForm.handleSubmit(handleEmailLogin)} className="space-y-4 mt-4">
+                <FormField
+                  control={emailForm.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-gray-700">Email</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="email"
+                          className="w-full"
+                          placeholder="you@example.com"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium mb-1 text-gray-700">Password</label>
-                <Input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full"
-                  required
+                
+                <FormField
+                  control={emailForm.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-gray-700">Password</FormLabel>
+                      <FormControl>
+                        <div className="relative">
+                          <Input
+                            type={showPassword ? "text" : "password"}
+                            className="w-full pr-10"
+                            {...field}
+                          />
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            className="absolute right-0 top-0 h-full px-3 py-2"
+                            onClick={() => setShowPassword(!showPassword)}
+                          >
+                            {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                          </Button>
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </div>
-              
-              <Button type="submit" className="w-full bg-indigo-600 hover:bg-indigo-700" disabled={loading}>
-                {loading ? 'Logging in...' : 'Login'}
-              </Button>
-            </form>
+                
+                <Button 
+                  type="submit" 
+                  className="w-full bg-indigo-600 hover:bg-indigo-700" 
+                  disabled={loading}
+                >
+                  {loading ? 'Logging in...' : 'Login'}
+                </Button>
+              </form>
+            </Form>
           </TabsContent>
           
           <TabsContent value="username">
-            <form onSubmit={handleSubmit} className="space-y-4 mt-4">
-              <div>
-                <label className="block text-sm font-medium mb-1 text-gray-700">Username</label>
-                <Input
-                  type="text"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  className="w-full"
-                  required
+            <Form {...usernameForm}>
+              <form onSubmit={usernameForm.handleSubmit(handleUsernameLogin)} className="space-y-4 mt-4">
+                <FormField
+                  control={usernameForm.control}
+                  name="username"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-gray-700">Username</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          className="w-full"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium mb-1 text-gray-700">Password</label>
-                <Input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full"
-                  required
+                
+                <FormField
+                  control={usernameForm.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-gray-700">Password</FormLabel>
+                      <FormControl>
+                        <div className="relative">
+                          <Input
+                            type={showPassword ? "text" : "password"}
+                            className="w-full pr-10"
+                            {...field}
+                          />
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            className="absolute right-0 top-0 h-full px-3 py-2"
+                            onClick={() => setShowPassword(!showPassword)}
+                          >
+                            {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                          </Button>
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </div>
-              
-              <Button type="submit" className="w-full bg-indigo-600 hover:bg-indigo-700" disabled={loading}>
-                {loading ? 'Logging in...' : 'Login'}
-              </Button>
-            </form>
+                
+                <Button 
+                  type="submit" 
+                  className="w-full bg-indigo-600 hover:bg-indigo-700" 
+                  disabled={loading}
+                >
+                  {loading ? 'Logging in...' : 'Login'}
+                </Button>
+              </form>
+            </Form>
           </TabsContent>
         </Tabs>
         
@@ -172,24 +283,33 @@ export default function LoginPage() {
                 </DialogDescription>
               </DialogHeader>
               
-              <form onSubmit={handleResetPassword} className="space-y-4 py-4">
-                <div>
-                  <label className="block text-sm font-medium mb-1">Email</label>
-                  <Input
-                    type="email"
-                    value={resetEmail}
-                    onChange={(e) => setResetEmail(e.target.value)}
-                    placeholder="Enter your email address"
-                    required
+              <Form {...resetForm}>
+                <form onSubmit={resetForm.handleSubmit(handleResetPassword)} className="space-y-4 py-4">
+                  <FormField
+                    control={resetForm.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Email</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="email"
+                            placeholder="Enter your email address"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
-                </div>
-                
-                <DialogFooter>
-                  <Button type="submit" disabled={isResetting}>
-                    {isResetting ? 'Sending...' : 'Send Reset Link'}
-                  </Button>
-                </DialogFooter>
-              </form>
+                  
+                  <DialogFooter>
+                    <Button type="submit" disabled={isResetting}>
+                      {isResetting ? 'Sending...' : 'Send Reset Link'}
+                    </Button>
+                  </DialogFooter>
+                </form>
+              </Form>
             </DialogContent>
           </Dialog>
           

@@ -3,14 +3,17 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { Session, User, AuthResponse } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 interface AuthContextType {
   user: User | null;
   session: Session | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<AuthResponse>;
-  signUp: (email: string, password: string) => Promise<AuthResponse>;
+  signUp: (email: string, password: string, fullName: string, phone: string) => Promise<AuthResponse>;
   signOut: () => Promise<void>;
+  resetPassword: (email: string) => Promise<{ error: any }>;
+  updatePassword: (newPassword: string) => Promise<{ error: any }>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -48,9 +51,35 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return response;
   };
 
-  const signUp = async (email: string, password: string) => {
-    const response = await supabase.auth.signUp({ email, password });
+  const signUp = async (email: string, password: string, fullName: string, phone: string) => {
+    const response = await supabase.auth.signUp({ 
+      email, 
+      password,
+      options: {
+        data: {
+          full_name: fullName
+        },
+      }
+    });
+    
     if (response.error) throw response.error;
+    
+    // If signup is successful, update the profile with additional data
+    if (response.data.user) {
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .update({ 
+          username: fullName,
+          phone: phone 
+        })
+        .eq('id', response.data.user.id);
+
+      if (profileError) {
+        toast.error('Profile could not be updated');
+        console.error('Profile update error:', profileError);
+      }
+    }
+    
     navigate('/');
     return response;
   };
@@ -60,8 +89,31 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     navigate('/login');
   };
 
+  const resetPassword = async (email: string) => {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.origin + '/profile',
+    });
+    return { error };
+  };
+
+  const updatePassword = async (newPassword: string) => {
+    const { error } = await supabase.auth.updateUser({
+      password: newPassword,
+    });
+    return { error };
+  };
+
   return (
-    <AuthContext.Provider value={{ user, session, loading, signIn, signUp, signOut }}>
+    <AuthContext.Provider value={{ 
+      user, 
+      session, 
+      loading, 
+      signIn, 
+      signUp, 
+      signOut, 
+      resetPassword,
+      updatePassword
+    }}>
       {children}
     </AuthContext.Provider>
   );

@@ -13,6 +13,7 @@ import SignupPage from "./pages/SignupPage";
 import HistoryPage from "./pages/HistoryPage";
 import ProfilePage from "./pages/ProfilePage";
 import NotFound from "./pages/NotFound";
+import Navbar from "./components/Navbar";
 
 const App = () => {
   const [queryClient] = useState(() => new QueryClient());
@@ -27,9 +28,24 @@ const App = () => {
             <Routes>
               <Route path="/login" element={<LoginPage />} />
               <Route path="/signup" element={<SignupPage />} />
-              <Route path="/" element={<Layout><HomePage /></Layout>} />
-              <Route path="/history" element={<Layout><HistoryPage /></Layout>} />
-              <Route path="/profile" element={<Layout><ProfilePage /></Layout>} />
+              <Route path="/" element={
+                <>
+                  <Navbar />
+                  <Layout><HomePage /></Layout>
+                </>
+              } />
+              <Route path="/history" element={
+                <>
+                  <Navbar />
+                  <Layout><HistoryPage /></Layout>
+                </>
+              } />
+              <Route path="/profile" element={
+                <>
+                  <Navbar />
+                  <Layout><ProfilePage /></Layout>
+                </>
+              } />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </AuthProvider>

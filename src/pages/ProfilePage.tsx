@@ -7,6 +7,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
+import { Eye, EyeOff } from 'lucide-react';
 
 interface Profile {
   username: string;
@@ -14,20 +19,54 @@ interface Profile {
   phone?: string;
 }
 
+// Edit profile schema
+const editProfileSchema = z.object({
+  fullName: z.string().min(2, 'Full name must be at least 2 characters'),
+  phone: z.string().optional(),
+});
+
+// Change password schema
+const changePasswordSchema = z.object({
+  currentPassword: z.string().min(1, 'Current password is required'),
+  newPassword: z.string().min(6, 'New password must be at least 6 characters'),
+  confirmPassword: z.string().min(6, 'Please confirm your new password'),
+}).refine((data) => data.newPassword === data.confirmPassword, {
+  message: "Passwords don't match",
+  path: ["confirmPassword"],
+});
+
+type EditProfileFormValues = z.infer<typeof editProfileSchema>;
+type ChangePasswordFormValues = z.infer<typeof changePasswordSchema>;
+
 export default function ProfilePage() {
-  const { user } = useAuth();
+  const { user, updatePassword } = useAuth();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
   
-  // Edit profile states
-  const [fullName, setFullName] = useState('');
-  const [phone, setPhone] = useState('');
+  // Password visibility states
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   
-  // Change password states
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  // Edit profile form
+  const profileForm = useForm<EditProfileFormValues>({
+    resolver: zodResolver(editProfileSchema),
+    defaultValues: {
+      fullName: '',
+      phone: '',
+    },
+  });
+
+  // Change password form
+  const passwordForm = useForm<ChangePasswordFormValues>({
+    resolver: zodResolver(changePasswordSchema),
+    defaultValues: {
+      currentPassword: '',
+      newPassword: '',
+      confirmPassword: '',
+    },
+  });
 
   useEffect(() => {
     async function loadProfile() {
@@ -45,8 +84,8 @@ export default function ProfilePage() {
         if (error) throw error;
 
         setProfile(data);
-        setFullName(data.username || '');
-        setPhone(data.phone || '');
+        profileForm.setValue('fullName', data.username || '');
+        profileForm.setValue('phone', data.phone || '');
       } catch (error: any) {
         toast.error('Error loading profile');
         console.error(error);
@@ -56,18 +95,17 @@ export default function ProfilePage() {
     }
 
     loadProfile();
-  }, [user]);
+  }, [user, profileForm]);
 
-  const handleUpdateProfile = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleUpdateProfile = async (values: EditProfileFormValues) => {
     setUpdating(true);
     
     try {
       const { error } = await supabase
         .from('profiles')
         .update({
-          username: fullName,
-          phone: phone
+          username: values.fullName,
+          phone: values.phone
         })
         .eq('id', user!.id);
         
@@ -77,8 +115,8 @@ export default function ProfilePage() {
       if (profile) {
         setProfile({
           ...profile,
-          username: fullName,
-          phone: phone
+          username: values.fullName,
+          phone: values.phone
         });
       }
       
@@ -91,38 +129,31 @@ export default function ProfilePage() {
     }
   };
   
-  const handleUpdatePassword = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (newPassword !== confirmPassword) {
-      toast.error('New passwords do not match');
-      return;
-    }
-    
+  const handleUpdatePassword = async (values: ChangePasswordFormValues) => {
     setUpdating(true);
     
     try {
       // First verify the current password by trying to sign in
       const { error: signInError } = await supabase.auth.signInWithPassword({
         email: user!.email!,
-        password: currentPassword,
+        password: values.currentPassword,
       });
       
       if (signInError) throw new Error('Current password is incorrect');
       
       // Update the password
-      const { error } = await supabase.auth.updateUser({
-        password: newPassword,
-      });
+      const { error } = await updatePassword(values.newPassword);
       
       if (error) throw error;
       
       toast.success('Password updated successfully');
       
       // Clear the form
-      setCurrentPassword('');
-      setNewPassword('');
-      setConfirmPassword('');
+      passwordForm.reset({
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: '',
+      });
     } catch (error: any) {
       toast.error(error.message || 'Failed to update password');
     } finally {
@@ -198,91 +229,159 @@ export default function ProfilePage() {
           </TabsList>
           
           <TabsContent value="profile">
-            <form onSubmit={handleUpdateProfile} className="space-y-6">
-              <h2 className="text-xl font-semibold mb-4">Edit Profile Information</h2>
-              
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium mb-1 text-gray-700">Full Name</label>
-                  <Input
-                    type="text"
-                    value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
-                    className="w-full"
-                  />
-                </div>
+            <Form {...profileForm}>
+              <form onSubmit={profileForm.handleSubmit(handleUpdateProfile)} className="space-y-6">
+                <h2 className="text-xl font-semibold mb-4">Edit Profile Information</h2>
                 
-                <div>
-                  <label className="block text-sm font-medium mb-1 text-gray-700">Phone Number</label>
-                  <Input
-                    type="tel"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    className="w-full"
-                    placeholder="+1 (555) 123-4567"
-                  />
-                </div>
-              </div>
-              
-              <Button 
-                type="submit" 
-                className="bg-indigo-600 hover:bg-indigo-700" 
-                disabled={updating}
-              >
-                {updating ? 'Updating...' : 'Save Changes'}
-              </Button>
-            </form>
+                <FormField
+                  control={profileForm.control}
+                  name="fullName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-gray-700">Full Name</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          className="w-full"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <FormField
+                  control={profileForm.control}
+                  name="phone"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-gray-700">Phone Number</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="tel"
+                          className="w-full"
+                          placeholder="+1 (555) 123-4567"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <Button 
+                  type="submit" 
+                  className="bg-indigo-600 hover:bg-indigo-700" 
+                  disabled={updating}
+                >
+                  {updating ? 'Updating...' : 'Save Changes'}
+                </Button>
+              </form>
+            </Form>
           </TabsContent>
           
           <TabsContent value="password">
-            <form onSubmit={handleUpdatePassword} className="space-y-6">
-              <h2 className="text-xl font-semibold mb-4">Change Password</h2>
-              
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium mb-1 text-gray-700">Current Password</label>
-                  <Input
-                    type="password"
-                    value={currentPassword}
-                    onChange={(e) => setCurrentPassword(e.target.value)}
-                    className="w-full"
-                    required
-                  />
-                </div>
+            <Form {...passwordForm}>
+              <form onSubmit={passwordForm.handleSubmit(handleUpdatePassword)} className="space-y-6">
+                <h2 className="text-xl font-semibold mb-4">Change Password</h2>
                 
-                <div>
-                  <label className="block text-sm font-medium mb-1 text-gray-700">New Password</label>
-                  <Input
-                    type="password"
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    className="w-full"
-                    required
-                    minLength={6}
-                  />
-                </div>
+                <FormField
+                  control={passwordForm.control}
+                  name="currentPassword"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-gray-700">Current Password</FormLabel>
+                      <FormControl>
+                        <div className="relative">
+                          <Input
+                            type={showCurrentPassword ? "text" : "password"}
+                            className="w-full pr-10"
+                            {...field}
+                          />
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            className="absolute right-0 top-0 h-full px-3 py-2"
+                            onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                          >
+                            {showCurrentPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                          </Button>
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 
-                <div>
-                  <label className="block text-sm font-medium mb-1 text-gray-700">Confirm New Password</label>
-                  <Input
-                    type="password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="w-full"
-                    required
-                    minLength={6}
-                  />
-                </div>
-              </div>
-              
-              <Button 
-                type="submit" 
-                className="bg-indigo-600 hover:bg-indigo-700" 
-                disabled={updating}
-              >
-                {updating ? 'Updating...' : 'Change Password'}
-              </Button>
-            </form>
+                <FormField
+                  control={passwordForm.control}
+                  name="newPassword"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-gray-700">New Password</FormLabel>
+                      <FormControl>
+                        <div className="relative">
+                          <Input
+                            type={showNewPassword ? "text" : "password"}
+                            className="w-full pr-10"
+                            {...field}
+                          />
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            className="absolute right-0 top-0 h-full px-3 py-2"
+                            onClick={() => setShowNewPassword(!showNewPassword)}
+                          >
+                            {showNewPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                          </Button>
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <FormField
+                  control={passwordForm.control}
+                  name="confirmPassword"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-gray-700">Confirm New Password</FormLabel>
+                      <FormControl>
+                        <div className="relative">
+                          <Input
+                            type={showConfirmPassword ? "text" : "password"}
+                            className="w-full pr-10"
+                            {...field}
+                          />
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            className="absolute right-0 top-0 h-full px-3 py-2"
+                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                          >
+                            {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                          </Button>
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <Button 
+                  type="submit" 
+                  className="bg-indigo-600 hover:bg-indigo-700" 
+                  disabled={updating}
+                >
+                  {updating ? 'Updating...' : 'Change Password'}
+                </Button>
+              </form>
+            </Form>
           </TabsContent>
         </Tabs>
       </Card>
