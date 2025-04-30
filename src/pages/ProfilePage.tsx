@@ -36,6 +36,7 @@ export default function ProfilePage() {
 
         if (error) throw error;
 
+        console.log('Profile loaded:', data);
         setProfile(data);
       } catch (error: any) {
         console.error(error);
@@ -49,6 +50,7 @@ export default function ProfilePage() {
 
   const handleProfileUpdate = (updatedData: {username: string; phone?: string}) => {
     if (profile) {
+      console.log('Profile update handler called with:', updatedData);
       setProfile({
         ...profile,
         ...updatedData
@@ -66,11 +68,11 @@ export default function ProfilePage() {
 
   return (
     <div className="container mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6 text-indigo-700">Your Profile</h1>
+      <h1 className="text-2xl font-bold mb-6 text-gray-800">Your Profile</h1>
       
       <ProfileInfo user={user} profile={profile} />
       
-      <Card className="p-8 shadow-md gradient-card">
+      <Card className="p-8 shadow-md bg-white">
         <Tabs defaultValue="profile" className="w-full">
           <TabsList className="mb-6">
             <TabsTrigger value="profile">Edit Profile</TabsTrigger>

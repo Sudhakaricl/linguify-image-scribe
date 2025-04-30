@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -82,7 +81,7 @@
   }
 
   body {
-    @apply bg-gradient-to-r from-[#6a11cb] to-[#2575fc] min-h-screen;
+    @apply bg-gray-50 text-gray-900;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
   
@@ -99,22 +98,22 @@
   }
 }
 
-/* Gradient styles for components */
+/* Professional component styles */
 @layer components {
   .card {
-    @apply bg-white bg-opacity-80 backdrop-blur-sm;
+    @apply bg-white shadow-md rounded-lg border border-gray-100;
   }
   
   .gradient-card {
-    @apply bg-gradient-to-br from-white to-purple-50 shadow-md;
+    @apply bg-white shadow-md;
   }
   
   .gradient-button {
-    @apply bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700;
+    @apply bg-indigo-600 hover:bg-indigo-700;
   }
   
   .gradient-sidebar {
-    @apply bg-gradient-to-b from-indigo-900 to-purple-900;
+    @apply bg-gray-100;
   }
 }
 

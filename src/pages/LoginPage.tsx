@@ -14,18 +14,18 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-      <Card className="w-full max-w-md p-8 shadow-lg backdrop-blur-sm bg-white/10 border border-white/20">
-        <h1 className="text-2xl font-bold text-center mb-6 text-accent">Welcome Back</h1>
+    <div className="min-h-screen flex items-center justify-center p-4 bg-gray-50">
+      <Card className="w-full max-w-md p-8 shadow-lg bg-white">
+        <h1 className="text-2xl font-bold text-center mb-6 text-indigo-700">Welcome Back</h1>
         
         <EmailLoginForm onResetPassword={handleResetPasswordClick} />
         
         <div className="flex justify-end mt-6 text-sm">
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogContent className="backdrop-blur-sm bg-white/20 border border-white/20">
+            <DialogContent className="bg-white">
               <DialogHeader>
-                <DialogTitle className="text-white">Reset Password</DialogTitle>
-                <DialogDescription className="text-white/80">
+                <DialogTitle>Reset Password</DialogTitle>
+                <DialogDescription className="text-gray-600">
                   Enter your email address and we'll send you a link to reset your password.
                 </DialogDescription>
               </DialogHeader>
@@ -34,7 +34,7 @@ export default function LoginPage() {
             </DialogContent>
           </Dialog>
           
-          <Link to="/signup" className="text-white hover:text-accent hover:underline transition-colors">
+          <Link to="/signup" className="text-indigo-600 hover:text-indigo-800 hover:underline transition-colors">
             Create Account
           </Link>
         </div>

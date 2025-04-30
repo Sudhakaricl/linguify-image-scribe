@@ -13,17 +13,17 @@ interface ProfileInfoProps {
 
 export default function ProfileInfo({ user, profile }: ProfileInfoProps) {
   return (
-    <Card className="p-8 shadow-md mb-6 gradient-card">
+    <Card className="p-8 shadow-md mb-6 bg-white">
       <div className="space-y-6">
         <div>
-          <h2 className="text-xl font-semibold mb-4">Account Information</h2>
+          <h2 className="text-xl font-semibold mb-4 text-gray-800">Account Information</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="font-medium text-gray-700">Email</label>
               <p className="mt-1 text-gray-900">{user?.email}</p>
             </div>
             <div>
-              <label className="font-medium text-gray-700">Full Name</label>
+              <label className="font-medium text-gray-700">Display Name</label>
               <p className="mt-1 text-gray-900">{profile.username}</p>
             </div>
             {profile.phone && (

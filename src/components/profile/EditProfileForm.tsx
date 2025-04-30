@@ -40,7 +40,7 @@ export default function EditProfileForm({ userId, initialData, onProfileUpdate }
     setUpdating(true);
     
     try {
-      // Fix: Ensure phone is properly handled before storing
+      // Ensure phone is properly handled before storing
       const phoneValue = values.phone && values.phone.trim() !== '' ? values.phone : null;
       
       const { error } = await supabase
@@ -59,9 +59,15 @@ export default function EditProfileForm({ userId, initialData, onProfileUpdate }
       });
       
       toast.success('Profile updated successfully');
+      
+      // Log the update to verify
+      console.log('Profile updated:', {
+        username: values.fullName,
+        phone: phoneValue
+      });
     } catch (error: any) {
       toast.error(error.message || 'Failed to update profile');
-      console.error(error);
+      console.error('Profile update error:', error);
     } finally {
       setUpdating(false);
     }
@@ -77,11 +83,11 @@ export default function EditProfileForm({ userId, initialData, onProfileUpdate }
           name="fullName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-gray-700">Full Name</FormLabel>
+              <FormLabel>Full Name</FormLabel>
               <FormControl>
                 <Input
                   type="text"
-                  className="w-full"
+                  className="bg-white text-gray-800"
                   {...field}
                 />
               </FormControl>
@@ -95,11 +101,11 @@ export default function EditProfileForm({ userId, initialData, onProfileUpdate }
           name="phone"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-gray-700">Phone Number</FormLabel>
+              <FormLabel>Phone Number</FormLabel>
               <FormControl>
                 <Input
                   type="tel"
-                  className="w-full"
+                  className="bg-white text-gray-800"
                   placeholder="+1 (555) 123-4567"
                   {...field}
                 />
@@ -111,7 +117,7 @@ export default function EditProfileForm({ userId, initialData, onProfileUpdate }
         
         <Button 
           type="submit" 
-          className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700" 
+          className="bg-indigo-600 hover:bg-indigo-700 text-white" 
           disabled={updating}
         >
           {updating ? 'Updating...' : 'Save Changes'}
