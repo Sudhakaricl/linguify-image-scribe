@@ -2,14 +2,11 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Card } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import EmailLoginForm from '@/components/auth/EmailLoginForm';
-import UsernameLoginForm from '@/components/auth/UsernameLoginForm';
 import ResetPasswordForm from '@/components/auth/ResetPasswordForm';
 
 export default function LoginPage() {
-  const [loginMethod, setLoginMethod] = useState<'email' | 'username'>('email');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   
   const handleResetPasswordClick = () => {
@@ -17,35 +14,18 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gray-50">
-      <Card className="w-full max-w-md p-8 shadow-lg">
-        <h1 className="text-2xl font-bold text-center mb-6 text-indigo-700">Welcome Back</h1>
+    <div className="min-h-screen flex items-center justify-center p-4">
+      <Card className="w-full max-w-md p-8 shadow-lg backdrop-blur-sm bg-white/10 border border-white/20">
+        <h1 className="text-2xl font-bold text-center mb-6 text-accent">Welcome Back</h1>
         
-        <Tabs
-          value={loginMethod}
-          onValueChange={(value) => setLoginMethod(value as 'email' | 'username')}
-          className="mb-6"
-        >
-          <TabsList className="w-full grid grid-cols-2">
-            <TabsTrigger value="email">Login with Email</TabsTrigger>
-            <TabsTrigger value="username">Login with Username</TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="email">
-            <EmailLoginForm onResetPassword={handleResetPasswordClick} />
-          </TabsContent>
-          
-          <TabsContent value="username">
-            <UsernameLoginForm />
-          </TabsContent>
-        </Tabs>
+        <EmailLoginForm onResetPassword={handleResetPasswordClick} />
         
-        <div className="flex justify-end mt-4 text-sm">
+        <div className="flex justify-end mt-6 text-sm">
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogContent>
+            <DialogContent className="backdrop-blur-sm bg-white/20 border border-white/20">
               <DialogHeader>
-                <DialogTitle>Reset Password</DialogTitle>
-                <DialogDescription>
+                <DialogTitle className="text-white">Reset Password</DialogTitle>
+                <DialogDescription className="text-white/80">
                   Enter your email address and we'll send you a link to reset your password.
                 </DialogDescription>
               </DialogHeader>
@@ -54,7 +34,7 @@ export default function LoginPage() {
             </DialogContent>
           </Dialog>
           
-          <Link to="/signup" className="text-indigo-600 hover:text-indigo-800 hover:underline">
+          <Link to="/signup" className="text-white hover:text-accent hover:underline transition-colors">
             Create Account
           </Link>
         </div>

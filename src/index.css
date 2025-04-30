@@ -82,8 +82,20 @@
   }
 
   body {
-    @apply bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 min-h-screen;
+    @apply bg-gradient-to-r from-[#6a11cb] to-[#2575fc] min-h-screen;
     font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-white;
+  }
+  
+  p, span, label {
+    @apply text-white;
+  }
+  
+  .text-accent {
+    @apply text-[#ffcc00];
   }
 }
 
