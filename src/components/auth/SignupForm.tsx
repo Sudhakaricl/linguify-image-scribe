@@ -45,7 +45,9 @@ export default function SignupForm() {
     setLoading(true);
     
     try {
-      await signUp(values.email, values.password, values.fullName, values.phone || '');
+      // Fix: Ensure phone is passed as an actual value, not an empty string
+      const phoneValue = values.phone && values.phone.trim() !== '' ? values.phone : null;
+      await signUp(values.email, values.password, values.fullName, phoneValue || '');
       toast.success('Account created successfully! Please check your email for verification.');
     } catch (error: any) {
       toast.error(error.message || 'Failed to sign up');

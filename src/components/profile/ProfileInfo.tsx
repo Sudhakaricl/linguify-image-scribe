@@ -13,7 +13,7 @@ interface ProfileInfoProps {
 
 export default function ProfileInfo({ user, profile }: ProfileInfoProps) {
   return (
-    <Card className="p-8 shadow-md mb-6">
+    <Card className="p-8 shadow-md mb-6 gradient-card">
       <div className="space-y-6">
         <div>
           <h2 className="text-xl font-semibold mb-4">Account Information</h2>

@@ -82,8 +82,27 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 min-h-screen;
     font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+/* Gradient styles for components */
+@layer components {
+  .card {
+    @apply bg-white bg-opacity-80 backdrop-blur-sm;
+  }
+  
+  .gradient-card {
+    @apply bg-gradient-to-br from-white to-purple-50 shadow-md;
+  }
+  
+  .gradient-button {
+    @apply bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700;
+  }
+  
+  .gradient-sidebar {
+    @apply bg-gradient-to-b from-indigo-900 to-purple-900;
   }
 }
 

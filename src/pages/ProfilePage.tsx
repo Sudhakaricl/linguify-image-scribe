@@ -70,7 +70,7 @@ export default function ProfilePage() {
       
       <ProfileInfo user={user} profile={profile} />
       
-      <Card className="p-8 shadow-md">
+      <Card className="p-8 shadow-md gradient-card">
         <Tabs defaultValue="profile" className="w-full">
           <TabsList className="mb-6">
             <TabsTrigger value="profile">Edit Profile</TabsTrigger>

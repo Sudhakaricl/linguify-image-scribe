@@ -37,23 +37,23 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-gray-50">
-        {/* Mobile header with menu button */}
+      <div className="min-h-screen flex w-full bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100">
+        {/* Mobile header with menu button - minimized but kept for mobile only */}
         {isMobile && (
-          <div className="fixed top-0 left-0 w-full bg-white h-16 flex items-center px-4 shadow-sm z-20">
+          <div className="fixed top-0 left-0 w-full bg-gradient-to-r from-indigo-600 to-purple-600 h-12 flex items-center px-4 shadow-sm z-20">
             <Button 
               variant="ghost" 
               size="icon"
-              className="mr-2"
+              className="text-white mr-2"
               onClick={() => setSidebarOpen(!sidebarOpen)}
             >
               <Menu className="h-6 w-6" />
             </Button>
-            <span className="font-semibold text-indigo-700">Text Extraction</span>
+            <span className="font-semibold text-white">Text Extraction</span>
           </div>
         )}
 
-        {/* Sidebar */}
+        {/* Sidebar with gradient */}
         <div 
           className={`
             ${isMobile ? 'fixed z-10 h-full' : 'relative'} 
@@ -61,10 +61,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             transition-transform duration-300 ease-in-out
           `}
         >
-          <Sidebar className="h-full bg-white shadow-lg border-r border-gray-200">
+          <Sidebar className="h-full bg-gradient-to-b from-indigo-800 to-purple-900 shadow-lg border-r border-indigo-700">
             {!isMobile && (
-              <div className="p-4 flex items-center justify-center border-b border-gray-100">
-                <h1 className="text-xl font-bold text-indigo-700">Text Extraction</h1>
+              <div className="p-4 flex items-center justify-center border-b border-indigo-700">
+                <h1 className="text-xl font-bold text-white">Text Extraction</h1>
               </div>
             )}
             <SidebarContent className="p-3">
@@ -73,19 +73,19 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   <SidebarMenuButton 
                     asChild 
                     tooltip={isMobile ? undefined : "Home"} 
-                    className="hover:bg-indigo-50 group w-full"
+                    className="hover:bg-indigo-700/50 group w-full"
                   >
                     <Link
                       to="/" 
                       onClick={handleNavigation('/')}
                       className={`flex items-center gap-3 px-4 py-3 rounded-md transition-colors ${
                         location.pathname === '/' 
-                          ? 'bg-indigo-100 text-indigo-700' 
-                          : 'text-gray-700 hover:text-indigo-700'
+                          ? 'bg-indigo-600/70 text-white' 
+                          : 'text-indigo-100 hover:text-white'
                       }`}
                     >
-                      <Home className="h-5 w-5 group-hover:text-indigo-600 flex-shrink-0" />
-                      <span className="group-hover:text-indigo-600 font-medium">Home</span>
+                      <Home className="h-5 w-5 group-hover:text-white flex-shrink-0" />
+                      <span className="group-hover:text-white font-medium">Home</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -93,19 +93,19 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   <SidebarMenuButton 
                     asChild 
                     tooltip={isMobile ? undefined : "History"} 
-                    className="hover:bg-indigo-50 group w-full"
+                    className="hover:bg-indigo-700/50 group w-full"
                   >
                     <Link
                       to="/history" 
                       onClick={handleNavigation('/history')}
                       className={`flex items-center gap-3 px-4 py-3 rounded-md transition-colors ${
                         location.pathname === '/history' 
-                          ? 'bg-indigo-100 text-indigo-700' 
-                          : 'text-gray-700 hover:text-indigo-700'
+                          ? 'bg-indigo-600/70 text-white' 
+                          : 'text-indigo-100 hover:text-white'
                       }`}
                     >
-                      <History className="h-5 w-5 group-hover:text-indigo-600 flex-shrink-0" />
-                      <span className="group-hover:text-indigo-600 font-medium">History</span>
+                      <History className="h-5 w-5 group-hover:text-white flex-shrink-0" />
+                      <span className="group-hover:text-white font-medium">History</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -113,31 +113,31 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   <SidebarMenuButton 
                     asChild 
                     tooltip={isMobile ? undefined : "Profile"} 
-                    className="hover:bg-indigo-50 group w-full"
+                    className="hover:bg-indigo-700/50 group w-full"
                   >
                     <Link
                       to="/profile" 
                       onClick={handleNavigation('/profile')}
                       className={`flex items-center gap-3 px-4 py-3 rounded-md transition-colors ${
                         location.pathname === '/profile' 
-                          ? 'bg-indigo-100 text-indigo-700' 
-                          : 'text-gray-700 hover:text-indigo-700'
+                          ? 'bg-indigo-600/70 text-white' 
+                          : 'text-indigo-100 hover:text-white'
                       }`}
                     >
-                      <User className="h-5 w-5 group-hover:text-indigo-600 flex-shrink-0" />
-                      <span className="group-hover:text-indigo-600 font-medium">Profile</span>
+                      <User className="h-5 w-5 group-hover:text-white flex-shrink-0" />
+                      <span className="group-hover:text-white font-medium">Profile</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
                 
-                <div className="mt-4 pt-4 border-t border-gray-100">
+                <div className="mt-4 pt-4 border-t border-indigo-700/50">
                   <SidebarMenuItem>
                     <SidebarMenuButton 
                       onClick={signOut} 
                       tooltip={isMobile ? undefined : "Logout"} 
-                      className="hover:bg-red-50 group w-full"
+                      className="hover:bg-red-800/30 group w-full"
                     >
-                      <div className="flex items-center gap-3 px-4 py-3 rounded-md text-red-600 transition-colors group-hover:text-red-700">
+                      <div className="flex items-center gap-3 px-4 py-3 rounded-md text-pink-200 transition-colors group-hover:text-pink-100">
                         <LogOut className="h-5 w-5 flex-shrink-0" />
                         <span className="font-medium">Logout</span>
                       </div>
@@ -160,7 +160,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         {/* Main content */}
         <main className={`
           flex-1 overflow-auto transition-all duration-300
-          ${isMobile ? 'pt-16' : 'p-0'}
+          ${isMobile ? 'pt-12' : 'p-0'}
         `}>
           <div className="p-4 md:p-6 lg:p-8">
             {children}

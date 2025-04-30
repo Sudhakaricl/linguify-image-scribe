@@ -40,11 +40,14 @@ export default function EditProfileForm({ userId, initialData, onProfileUpdate }
     setUpdating(true);
     
     try {
+      // Fix: Ensure phone is properly handled before storing
+      const phoneValue = values.phone && values.phone.trim() !== '' ? values.phone : null;
+      
       const { error } = await supabase
         .from('profiles')
         .update({
           username: values.fullName,
-          phone: values.phone
+          phone: phoneValue
         })
         .eq('id', userId);
         
@@ -52,7 +55,7 @@ export default function EditProfileForm({ userId, initialData, onProfileUpdate }
       
       onProfileUpdate({
         username: values.fullName,
-        phone: values.phone
+        phone: phoneValue || undefined
       });
       
       toast.success('Profile updated successfully');
@@ -108,7 +111,7 @@ export default function EditProfileForm({ userId, initialData, onProfileUpdate }
         
         <Button 
           type="submit" 
-          className="bg-indigo-600 hover:bg-indigo-700" 
+          className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700" 
           disabled={updating}
         >
           {updating ? 'Updating...' : 'Save Changes'}
