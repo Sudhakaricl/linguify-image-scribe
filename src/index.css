@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -86,15 +87,15 @@
   }
   
   h1, h2, h3, h4, h5, h6 {
-    @apply text-white;
+    @apply text-gray-800;
   }
   
   p, span, label {
-    @apply text-white;
+    @apply text-gray-700;
   }
   
   .text-accent {
-    @apply text-[#ffcc00];
+    @apply text-indigo-600;
   }
 }
 
@@ -128,10 +129,10 @@
   }
   
   .btn-primary {
-    @apply bg-indigo text-white py-2 px-4 rounded-md hover:bg-indigo-dark transition-colors;
+    @apply bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition-colors;
   }
   
   .btn-secondary {
-    @apply bg-pink text-white py-2 px-4 rounded-md hover:bg-pink-dark transition-colors;
+    @apply bg-pink-600 text-white py-2 px-4 rounded-md hover:bg-pink-700 transition-colors;
   }
 }

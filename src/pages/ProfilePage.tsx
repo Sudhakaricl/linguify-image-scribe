@@ -48,13 +48,30 @@ export default function ProfilePage() {
     loadProfile();
   }, [user]);
 
-  const handleProfileUpdate = (updatedData: {username: string; phone?: string}) => {
-    if (profile) {
+  const handleProfileUpdate = async (updatedData: {username: string; phone?: string}) => {
+    if (profile && user) {
       console.log('Profile update handler called with:', updatedData);
-      setProfile({
-        ...profile,
-        ...updatedData
-      });
+      
+      try {
+        // Update the local state
+        setProfile({
+          ...profile,
+          ...updatedData
+        });
+        
+        // Verify the update happened in the database
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('username, phone')
+          .eq('id', user.id)
+          .single();
+          
+        if (error) throw error;
+        
+        console.log('Profile updated:', data);
+      } catch (error) {
+        console.error('Error verifying profile update:', error);
+      }
     }
   };
 

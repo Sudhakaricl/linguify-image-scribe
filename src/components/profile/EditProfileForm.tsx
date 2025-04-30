@@ -76,14 +76,14 @@ export default function EditProfileForm({ userId, initialData, onProfileUpdate }
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleUpdateProfile)} className="space-y-6">
-        <h2 className="text-xl font-semibold mb-4">Edit Profile Information</h2>
+        <h2 className="text-xl font-semibold mb-4 text-gray-800">Edit Profile Information</h2>
         
         <FormField
           control={form.control}
           name="fullName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Full Name</FormLabel>
+              <FormLabel className="text-gray-700">Display Name</FormLabel>
               <FormControl>
                 <Input
                   type="text"
@@ -101,7 +101,7 @@ export default function EditProfileForm({ userId, initialData, onProfileUpdate }
           name="phone"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Phone Number</FormLabel>
+              <FormLabel className="text-gray-700">Phone Number</FormLabel>
               <FormControl>
                 <Input
                   type="tel"
