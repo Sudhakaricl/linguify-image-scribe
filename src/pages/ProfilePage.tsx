@@ -9,6 +9,7 @@ import EditProfileForm from '@/components/profile/EditProfileForm';
 import ChangePasswordForm from '@/components/profile/ChangePasswordForm';
 import ProfileSkeleton from '@/components/profile/ProfileSkeleton';
 import ProfileError from '@/components/profile/ProfileError';
+import { toast } from 'sonner';
 
 interface Profile {
   username: string;
@@ -49,29 +50,43 @@ export default function ProfilePage() {
   }, [user]);
 
   const handleProfileUpdate = async (updatedData: {username: string; phone?: string}) => {
-    if (profile && user) {
-      console.log('Profile update handler called with:', updatedData);
+    if (!profile || !user) return;
+    
+    try {
+      console.log('Updating profile with:', updatedData);
       
-      try {
-        // Update the local state
-        setProfile({
-          ...profile,
-          ...updatedData
-        });
+      // Update in Supabase
+      const { error } = await supabase
+        .from('profiles')
+        .update({
+          username: updatedData.username,
+          phone: updatedData.phone || null
+        })
+        .eq('id', user.id);
+      
+      if (error) throw error;
+      
+      // Update local state
+      setProfile({
+        ...profile,
+        username: updatedData.username,
+        phone: updatedData.phone || null
+      });
+      
+      // Verify the update in the database
+      const { data: verificationData, error: verificationError } = await supabase
+        .from('profiles')
+        .select('username, phone')
+        .eq('id', user.id)
+        .single();
         
-        // Verify the update happened in the database
-        const { data, error } = await supabase
-          .from('profiles')
-          .select('username, phone')
-          .eq('id', user.id)
-          .single();
-          
-        if (error) throw error;
-        
-        console.log('Profile updated:', data);
-      } catch (error) {
-        console.error('Error verifying profile update:', error);
-      }
+      if (verificationError) throw verificationError;
+      
+      console.log('Profile verified after update:', verificationData);
+      toast.success('Profile updated successfully');
+    } catch (error: any) {
+      console.error('Error updating profile:', error);
+      toast.error('Failed to update profile');
     }
   };
 
@@ -85,11 +100,11 @@ export default function ProfilePage() {
 
   return (
     <div className="container mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6 text-gray-800">Your Profile</h1>
+      <h1 className="page-title">Your Profile</h1>
       
       <ProfileInfo user={user} profile={profile} />
       
-      <Card className="p-8 shadow-md bg-white">
+      <Card className="p-8 shadow-md bg-white mt-8">
         <Tabs defaultValue="profile" className="w-full">
           <TabsList className="mb-6">
             <TabsTrigger value="profile">Edit Profile</TabsTrigger>
