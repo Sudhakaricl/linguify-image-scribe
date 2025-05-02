@@ -128,4 +128,13 @@
   .hover-effect {
     @apply transition-all duration-300 ease-in-out hover:transform hover:-translate-y-0.5 hover:shadow-md;
   }
+  
+  /* Sidebar styling */
+  .sidebar-nav-link {
+    @apply flex items-center gap-3 px-4 py-3 rounded-md text-[#ECF0F1] transition-all duration-300 ease-in-out hover:bg-[#26B99A] hover:text-white;
+  }
+  
+  .sidebar-nav-link-active {
+    @apply bg-[#26B99A] text-white font-medium;
+  }
 }
