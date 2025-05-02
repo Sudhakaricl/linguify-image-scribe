@@ -1,172 +1,60 @@
+"use client";
 
-import { useEffect, useState } from 'react';
-import { useNavigate, useLocation, Link } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
-import { SidebarProvider, Sidebar, SidebarContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from "@/components/ui/sidebar";
-import { Button } from "@/components/ui/button";
-import { Home, History, User, LogOut, Menu } from 'lucide-react';
-import { useIsMobile } from '@/hooks/use-mobile';
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { ReactNode, useEffect } from "react";
 
-export default function Layout({ children }: { children: React.ReactNode }) {
-  const { user, signOut } = useAuth();
-  const navigate = useNavigate();
-  const location = useLocation();
-  const isMobile = useIsMobile();
-  const [sidebarOpen, setSidebarOpen] = useState(!isMobile);
+interface Props {
+  children: ReactNode;
+}
+
+export default function Layout({ children }: Props) {
+  const router = useRouter();
 
   useEffect(() => {
-    if (!user && !location.pathname.includes('/login') && !location.pathname.includes('/signup')) {
-      navigate('/login');
+    const user = localStorage.getItem("user");
+    if (!user) {
+      router.push("/login");
     }
-  }, [user, navigate, location.pathname]);
+  }, [router]);
 
-  // Adjust sidebar visibility on screen size change
-  useEffect(() => {
-    setSidebarOpen(!isMobile);
-  }, [isMobile]);
-
-  if (!user) return null;
-
-  const handleNavigation = (path: string) => (e: React.MouseEvent) => {
-    e.preventDefault();
-    navigate(path);
-    if (isMobile) {
-      setSidebarOpen(false);
-    }
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    router.push("/login");
   };
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full">
-        {/* Mobile header with menu button */}
-        {isMobile && (
-          <div className="fixed top-0 left-0 w-full bg-white border-b h-12 flex items-center px-4 shadow-sm z-20">
-            <Button 
-              variant="ghost" 
-              size="icon"
-              className="mr-2 transition-all duration-300 ease-in-out"
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-            >
-              <Menu className="h-6 w-6" />
-            </Button>
-            <span className="font-semibold">Text Extraction</span>
-          </div>
-        )}
-
-        {/* Sidebar */}
-        <div 
-          className={`
-            ${isMobile ? 'fixed z-10 h-full' : 'relative'} 
-            ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} 
-            transition-all duration-300 ease-in-out
-          `}
-        >
-          <Sidebar className="h-full bg-[#2A3F54] shadow-sm border-r">
-            {!isMobile && (
-              <div className="p-4 flex items-center justify-center border-b border-[#2E4B6F]">
-                <h1 className="text-xl font-bold text-[#ECF0F1]">Text Extraction</h1>
-              </div>
-            )}
-            <SidebarContent className="p-3">
-              <SidebarMenu>
-                <SidebarMenuItem>
-                  <SidebarMenuButton 
-                    asChild 
-                    tooltip={isMobile ? undefined : "Home"} 
-                    className="group w-full"
-                  >
-                    <Link
-                      to="/" 
-                      onClick={handleNavigation('/')}
-                      className={`flex items-center gap-3 px-4 py-3 rounded-md transition-all duration-300 ease-in-out ${
-                        location.pathname === '/' 
-                          ? 'bg-[#26B99A] text-white font-medium' 
-                          : 'text-[#ECF0F1] hover:bg-[#26B99A] hover:text-white'
-                      }`}
-                    >
-                      <Home className="h-5 w-5 flex-shrink-0" />
-                      <span className="font-medium">Home</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                  <SidebarMenuButton 
-                    asChild 
-                    tooltip={isMobile ? undefined : "History"} 
-                    className="group w-full"
-                  >
-                    <Link
-                      to="/history" 
-                      onClick={handleNavigation('/history')}
-                      className={`flex items-center gap-3 px-4 py-3 rounded-md transition-all duration-300 ease-in-out ${
-                        location.pathname === '/history' 
-                          ? 'bg-[#26B99A] text-white font-medium' 
-                          : 'text-[#ECF0F1] hover:bg-[#26B99A] hover:text-white'
-                      }`}
-                    >
-                      <History className="h-5 w-5 flex-shrink-0" />
-                      <span className="font-medium">History</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                  <SidebarMenuButton 
-                    asChild 
-                    tooltip={isMobile ? undefined : "Profile"} 
-                    className="group w-full"
-                  >
-                    <Link
-                      to="/profile" 
-                      onClick={handleNavigation('/profile')}
-                      className={`flex items-center gap-3 px-4 py-3 rounded-md transition-all duration-300 ease-in-out ${
-                        location.pathname === '/profile' 
-                          ? 'bg-[#26B99A] text-white font-medium' 
-                          : 'text-[#ECF0F1] hover:bg-[#26B99A] hover:text-white'
-                      }`}
-                    >
-                      <User className="h-5 w-5 flex-shrink-0" />
-                      <span className="font-medium">Profile</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-                
-                <div className="mt-4 pt-4 border-t border-[#2E4B6F]">
-                  <SidebarMenuItem>
-                    <SidebarMenuButton 
-                      onClick={signOut} 
-                      tooltip={isMobile ? undefined : "Logout"} 
-                      className="group w-full"
-                    >
-                      <div className="flex items-center gap-3 px-4 py-3 rounded-md text-[#ECF0F1] transition-all duration-300 ease-in-out hover:bg-[#26B99A] hover:text-white">
-                        <LogOut className="h-5 w-5 flex-shrink-0" />
-                        <span className="font-medium">Logout</span>
-                      </div>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                </div>
-              </SidebarMenu>
-            </SidebarContent>
-          </Sidebar>
+    <div className="flex min-h-screen">
+      {/* Sidebar */}
+      <div className="sidebar w-64 min-h-screen bg-[#2C3E50] flex flex-col">
+        <div className="p-4 text-white text-2xl font-bold border-b border-gray-700">
+          Text Extractor
         </div>
-        
-        {/* Overlay to close sidebar on mobile */}
-        {isMobile && sidebarOpen && (
-          <div 
-            className="fixed inset-0 bg-black bg-opacity-50 z-0 transition-all duration-300 ease-in-out"
-            onClick={() => setSidebarOpen(false)}
-          ></div>
-        )}
-        
-        {/* Main content */}
-        <main className={`
-          flex-1 overflow-auto transition-all duration-300 ease-in-out
-          ${isMobile ? 'pt-12' : 'p-0'}
-        `}>
-          <div className="p-4 md:p-6 lg:p-8">
-            {children}
+        <div className="flex-1 flex flex-col justify-between">
+          <div className="flex flex-col p-4 space-y-2">
+            <Link href="/text-extraction" className="flex items-center space-x-2 p-2 rounded hover:bg-[#34495E] transition-colors">
+              <span className="text-[#ECF0F1] hover:text-white">Extract Text</span>
+            </Link>
+            <Link href="/history" className="flex items-center space-x-2 p-2 rounded hover:bg-[#34495E] transition-colors">
+              <span className="text-[#ECF0F1] hover:text-white">History</span>
+            </Link>
+            <Link href="/dashboard" className="flex items-center space-x-2 p-2 rounded hover:bg-[#34495E] transition-colors">
+              <span className="text-[#ECF0F1] hover:text-white">Dashboard</span>
+            </Link>
           </div>
-        </main>
+          <div className="p-4 border-t border-gray-700">
+            <button
+              onClick={handleLogout}
+              className="w-full flex items-center space-x-2 p-2 rounded bg-red-500 text-white hover:bg-red-600 transition-colors"
+            >
+              <span>Logout</span>
+            </button>
+          </div>
+        </div>
       </div>
-    </SidebarProvider>
+
+      {/* Main content */}
+      <div className="flex-1 bg-gray-100 p-8">{children}</div>
+    </div>
   );
 }
