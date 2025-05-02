@@ -38,7 +38,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full">
-        {/* Mobile header with menu button - minimized but kept for mobile only */}
+        {/* Mobile header with menu button */}
         {isMobile && (
           <div className="fixed top-0 left-0 w-full bg-white border-b h-12 flex items-center px-4 shadow-sm z-20">
             <Button 
@@ -61,10 +61,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             transition-all duration-300 ease-in-out
           `}
         >
-          <Sidebar className="h-full bg-white shadow-sm border-r">
+          <Sidebar className="h-full bg-[#2A3F54] shadow-sm border-r">
             {!isMobile && (
-              <div className="p-4 flex items-center justify-center border-b">
-                <h1 className="text-xl font-bold">Text Extraction</h1>
+              <div className="p-4 flex items-center justify-center border-b border-[#2E4B6F]">
+                <h1 className="text-xl font-bold text-[#ECF0F1]">Text Extraction</h1>
               </div>
             )}
             <SidebarContent className="p-3">
@@ -80,8 +80,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                       onClick={handleNavigation('/')}
                       className={`flex items-center gap-3 px-4 py-3 rounded-md transition-all duration-300 ease-in-out ${
                         location.pathname === '/' 
-                          ? 'bg-blue-50 text-blue-700 font-medium' 
-                          : 'text-gray-700 hover:bg-gray-50'
+                          ? 'bg-[#26B99A] text-white font-medium' 
+                          : 'text-[#ECF0F1] hover:bg-[#26B99A] hover:text-white'
                       }`}
                     >
                       <Home className="h-5 w-5 flex-shrink-0" />
@@ -100,8 +100,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                       onClick={handleNavigation('/history')}
                       className={`flex items-center gap-3 px-4 py-3 rounded-md transition-all duration-300 ease-in-out ${
                         location.pathname === '/history' 
-                          ? 'bg-blue-50 text-blue-700 font-medium' 
-                          : 'text-gray-700 hover:bg-gray-50'
+                          ? 'bg-[#26B99A] text-white font-medium' 
+                          : 'text-[#ECF0F1] hover:bg-[#26B99A] hover:text-white'
                       }`}
                     >
                       <History className="h-5 w-5 flex-shrink-0" />
@@ -120,8 +120,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                       onClick={handleNavigation('/profile')}
                       className={`flex items-center gap-3 px-4 py-3 rounded-md transition-all duration-300 ease-in-out ${
                         location.pathname === '/profile' 
-                          ? 'bg-blue-50 text-blue-700 font-medium' 
-                          : 'text-gray-700 hover:bg-gray-50'
+                          ? 'bg-[#26B99A] text-white font-medium' 
+                          : 'text-[#ECF0F1] hover:bg-[#26B99A] hover:text-white'
                       }`}
                     >
                       <User className="h-5 w-5 flex-shrink-0" />
@@ -130,14 +130,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
                 
-                <div className="mt-4 pt-4 border-t">
+                <div className="mt-4 pt-4 border-t border-[#2E4B6F]">
                   <SidebarMenuItem>
                     <SidebarMenuButton 
                       onClick={signOut} 
                       tooltip={isMobile ? undefined : "Logout"} 
                       className="group w-full"
                     >
-                      <div className="flex items-center gap-3 px-4 py-3 rounded-md text-gray-700 transition-all duration-300 ease-in-out hover:bg-gray-50">
+                      <div className="flex items-center gap-3 px-4 py-3 rounded-md text-[#ECF0F1] transition-all duration-300 ease-in-out hover:bg-[#26B99A] hover:text-white">
                         <LogOut className="h-5 w-5 flex-shrink-0" />
                         <span className="font-medium">Logout</span>
                       </div>

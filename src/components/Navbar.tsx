@@ -38,8 +38,10 @@ const Navbar = () => {
                 <Link 
                   to="/" 
                   className={cn(
-                    "nav-link transition-all duration-300 ease-in-out",
-                    location.pathname === "/" && "nav-link-active"
+                    "px-4 py-2 rounded-md transition-all duration-300 ease-in-out",
+                    location.pathname === "/" 
+                      ? "bg-blue-50 text-blue-700 font-medium" 
+                      : "text-gray-700 hover:bg-gray-100"
                   )}
                 >
                   Home
@@ -47,8 +49,10 @@ const Navbar = () => {
                 <Link 
                   to="/history" 
                   className={cn(
-                    "nav-link transition-all duration-300 ease-in-out",
-                    location.pathname === "/history" && "nav-link-active"
+                    "px-4 py-2 rounded-md transition-all duration-300 ease-in-out",
+                    location.pathname === "/history" 
+                      ? "bg-blue-50 text-blue-700 font-medium" 
+                      : "text-gray-700 hover:bg-gray-100"
                   )}
                 >
                   History
@@ -56,8 +60,10 @@ const Navbar = () => {
                 <Link 
                   to="/profile" 
                   className={cn(
-                    "nav-link transition-all duration-300 ease-in-out",
-                    location.pathname === "/profile" && "nav-link-active"
+                    "px-4 py-2 rounded-md transition-all duration-300 ease-in-out",
+                    location.pathname === "/profile" 
+                      ? "bg-blue-50 text-blue-700 font-medium" 
+                      : "text-gray-700 hover:bg-gray-100"
                   )}
                 >
                   <div className="flex items-center gap-1">
@@ -119,7 +125,9 @@ const Navbar = () => {
                   to="/" 
                   className={cn(
                     "py-2 px-3 rounded-md transition-all duration-300 ease-in-out",
-                    location.pathname === "/" ? "bg-blue-50 text-blue-700 font-medium" : "hover:bg-gray-50"
+                    location.pathname === "/" 
+                      ? "bg-blue-50 text-blue-700 font-medium" 
+                      : "hover:bg-gray-50"
                   )}
                 >
                   Home
@@ -128,7 +136,9 @@ const Navbar = () => {
                   to="/history" 
                   className={cn(
                     "py-2 px-3 rounded-md transition-all duration-300 ease-in-out",
-                    location.pathname === "/history" ? "bg-blue-50 text-blue-700 font-medium" : "hover:bg-gray-50"
+                    location.pathname === "/history" 
+                      ? "bg-blue-50 text-blue-700 font-medium" 
+                      : "hover:bg-gray-50"
                   )}
                 >
                   History
@@ -137,7 +147,9 @@ const Navbar = () => {
                   to="/profile" 
                   className={cn(
                     "py-2 px-3 rounded-md transition-all duration-300 ease-in-out flex items-center gap-1",
-                    location.pathname === "/profile" ? "bg-blue-50 text-blue-700 font-medium" : "hover:bg-gray-50"
+                    location.pathname === "/profile" 
+                      ? "bg-blue-50 text-blue-700 font-medium" 
+                      : "hover:bg-gray-50"
                   )}
                 >
                   <User size={18} />

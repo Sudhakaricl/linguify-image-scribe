@@ -15,14 +15,14 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-gray-50">
-      <Card className="w-full max-w-md p-8 shadow-md bg-white transition-all duration-300 ease-in-out hover:shadow-lg">
+      <Card className="w-full max-w-md p-8 bg-white rounded-lg shadow-sm border border-gray-100 transition-all duration-300 ease-in-out hover:shadow-md hover:-translate-y-0.5">
         <h1 className="text-2xl font-bold text-center mb-6 text-gray-800">Welcome Back</h1>
         
         <EmailLoginForm onResetPassword={handleResetPasswordClick} />
         
         <div className="flex justify-end mt-6 text-sm">
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogContent className="bg-white">
+            <DialogContent className="bg-white rounded-lg shadow-md">
               <DialogHeader>
                 <DialogTitle>Reset Password</DialogTitle>
                 <DialogDescription className="text-gray-600">
