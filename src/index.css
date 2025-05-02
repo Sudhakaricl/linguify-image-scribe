@@ -1,4 +1,6 @@
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -45,80 +47,47 @@
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 48%;
-  }
-}
-
-@layer base {
   * {
     @apply border-border;
   }
-
+  
   body {
-    @apply bg-gray-50 text-gray-900;
+    @apply bg-gray-50 text-gray-900 font-sans;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
   
   h1, h2, h3, h4, h5, h6 {
-    @apply text-gray-800;
+    @apply text-gray-800 font-medium;
   }
   
   p, span, label {
     @apply text-gray-700;
   }
-  
-  .text-accent {
-    @apply text-blue-600;
-  }
 }
 
 /* Professional component styles */
 @layer components {
+  /* Card components */
   .card {
-    @apply bg-white shadow-md rounded-lg border border-gray-100;
+    @apply bg-white rounded-lg border border-gray-100 shadow-sm transition-all duration-300 ease-in-out hover:shadow-md;
   }
   
-  .paper-card {
-    @apply bg-white rounded-lg shadow-sm p-6 border border-gray-100;
+  /* Button styles */
+  .btn {
+    @apply inline-flex items-center justify-center rounded-md font-medium text-sm transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2;
   }
   
   .btn-primary {
-    @apply bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors;
+    @apply btn bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500 py-2 px-4;
   }
   
   .btn-secondary {
-    @apply bg-gray-200 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-300 transition-colors;
+    @apply btn bg-gray-200 text-gray-800 hover:bg-gray-300 focus:ring-gray-400 py-2 px-4;
   }
   
+  /* Form components */
   .form-input {
-    @apply border border-gray-200 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full;
+    @apply block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-all duration-300 ease-in-out;
   }
   
   .form-label {
@@ -129,14 +98,21 @@
     @apply mb-4;
   }
   
+  /* Link styles */
+  .link {
+    @apply text-blue-600 hover:text-blue-800 transition-all duration-300 ease-in-out;
+  }
+  
+  /* Navigation link styles */
   .nav-link {
-    @apply text-gray-700 hover:text-blue-600 transition-colors;
+    @apply px-4 py-2 rounded-md text-gray-700 hover:bg-gray-100 transition-all duration-300 ease-in-out;
   }
   
-  .active-nav-link {
-    @apply text-blue-600 font-medium;
+  .nav-link-active {
+    @apply px-4 py-2 rounded-md bg-blue-50 text-blue-700 font-medium;
   }
   
+  /* Layout containers */
   .container-box {
     @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
   }
@@ -147,5 +123,10 @@
   
   .page-title {
     @apply text-2xl font-bold mb-6 text-gray-800;
+  }
+  
+  /* Hover effects for interactive elements */
+  .hover-effect {
+    @apply transition-all duration-300 ease-in-out hover:transform hover:translate-y-[-2px] hover:shadow-md;
   }
 }

@@ -15,8 +15,8 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-gray-50">
-      <Card className="w-full max-w-md p-8 shadow-lg bg-white">
-        <h1 className="text-2xl font-bold text-center mb-6 text-indigo-700">Welcome Back</h1>
+      <Card className="w-full max-w-md p-8 shadow-md bg-white transition-all duration-300 ease-in-out hover:shadow-lg">
+        <h1 className="text-2xl font-bold text-center mb-6 text-gray-800">Welcome Back</h1>
         
         <EmailLoginForm onResetPassword={handleResetPasswordClick} />
         
@@ -34,7 +34,7 @@ export default function LoginPage() {
             </DialogContent>
           </Dialog>
           
-          <Link to="/signup" className="text-indigo-600 hover:text-indigo-800 hover:underline transition-colors">
+          <Link to="/signup" className="text-blue-600 hover:text-blue-800 transition-all duration-300 ease-in-out">
             Create Account
           </Link>
         </div>

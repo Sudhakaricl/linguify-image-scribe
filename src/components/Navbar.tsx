@@ -26,11 +26,11 @@ const Navbar = () => {
   };
   
   return (
-    <nav className="bg-indigo-600 text-white shadow-md">
+    <nav className="bg-white shadow-sm border-b">
       <div className="container mx-auto px-4 py-3">
         {/* Desktop Navigation */}
         <div className="hidden md:flex justify-between items-center">
-          <Link to="/" className="text-2xl font-bold">Text Extraction</Link>
+          <Link to="/" className="text-2xl font-bold text-gray-800 transition-all duration-300 ease-in-out hover:text-blue-600">Text Extraction</Link>
           
           <div className="flex items-center gap-6">
             {user ? (
@@ -38,8 +38,8 @@ const Navbar = () => {
                 <Link 
                   to="/" 
                   className={cn(
-                    "hover:text-gray-200 transition-colors font-medium",
-                    location.pathname === "/" && "underline underline-offset-4"
+                    "nav-link transition-all duration-300 ease-in-out",
+                    location.pathname === "/" && "nav-link-active"
                   )}
                 >
                   Home
@@ -47,8 +47,8 @@ const Navbar = () => {
                 <Link 
                   to="/history" 
                   className={cn(
-                    "hover:text-gray-200 transition-colors font-medium",
-                    location.pathname === "/history" && "underline underline-offset-4"
+                    "nav-link transition-all duration-300 ease-in-out",
+                    location.pathname === "/history" && "nav-link-active"
                   )}
                 >
                   History
@@ -56,8 +56,8 @@ const Navbar = () => {
                 <Link 
                   to="/profile" 
                   className={cn(
-                    "hover:text-gray-200 transition-colors font-medium",
-                    location.pathname === "/profile" && "underline underline-offset-4"
+                    "nav-link transition-all duration-300 ease-in-out",
+                    location.pathname === "/profile" && "nav-link-active"
                   )}
                 >
                   <div className="flex items-center gap-1">
@@ -67,7 +67,7 @@ const Navbar = () => {
                 </Link>
                 <Button 
                   variant="outline" 
-                  className="bg-transparent border-white text-white hover:bg-white hover:text-indigo-600 flex items-center gap-1"
+                  className="border-blue-600 text-blue-600 hover:bg-blue-50 transition-all duration-300 ease-in-out flex items-center gap-1"
                   onClick={handleLogout}
                 >
                   <LogOut size={18} />
@@ -79,13 +79,13 @@ const Navbar = () => {
                 <Link to="/login">
                   <Button 
                     variant="outline" 
-                    className="bg-transparent border-white text-white hover:bg-white hover:text-indigo-600 mr-2"
+                    className="border-blue-600 text-blue-600 hover:bg-blue-50 transition-all duration-300 ease-in-out mr-2"
                   >
                     Login
                   </Button>
                 </Link>
                 <Link to="/signup">
-                  <Button className="bg-white text-indigo-600 hover:bg-gray-100 hover:text-indigo-700">
+                  <Button className="bg-blue-600 text-white hover:bg-blue-700 transition-all duration-300 ease-in-out">
                     Sign Up
                   </Button>
                 </Link>
@@ -96,12 +96,12 @@ const Navbar = () => {
         
         {/* Mobile Navigation */}
         <div className="md:hidden flex justify-between items-center">
-          <Link to="/" className="text-xl font-bold">Text Extraction</Link>
+          <Link to="/" className="text-xl font-bold text-gray-800">Text Extraction</Link>
           
           <Button 
             variant="ghost" 
             size="icon"
-            className="text-white hover:bg-indigo-500"
+            className="text-gray-700 hover:bg-gray-100 transition-all duration-300 ease-in-out"
             onClick={toggleMenu}
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -111,15 +111,15 @@ const Navbar = () => {
       
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="md:hidden bg-indigo-700 px-4 py-3 border-t border-indigo-500 animate-in slide-in-from-top duration-300">
+        <div className="md:hidden bg-white px-4 py-3 border-t border-gray-100 animate-in slide-in-from-top duration-300 shadow-md">
           <div className="flex flex-col space-y-3">
             {user ? (
               <>
                 <Link 
                   to="/" 
                   className={cn(
-                    "py-2 px-3 rounded-md hover:bg-indigo-500 transition-colors",
-                    location.pathname === "/" && "bg-indigo-500 font-medium"
+                    "py-2 px-3 rounded-md transition-all duration-300 ease-in-out",
+                    location.pathname === "/" ? "bg-blue-50 text-blue-700 font-medium" : "hover:bg-gray-50"
                   )}
                 >
                   Home
@@ -127,8 +127,8 @@ const Navbar = () => {
                 <Link 
                   to="/history" 
                   className={cn(
-                    "py-2 px-3 rounded-md hover:bg-indigo-500 transition-colors",
-                    location.pathname === "/history" && "bg-indigo-500 font-medium"
+                    "py-2 px-3 rounded-md transition-all duration-300 ease-in-out",
+                    location.pathname === "/history" ? "bg-blue-50 text-blue-700 font-medium" : "hover:bg-gray-50"
                   )}
                 >
                   History
@@ -136,8 +136,8 @@ const Navbar = () => {
                 <Link 
                   to="/profile" 
                   className={cn(
-                    "py-2 px-3 rounded-md hover:bg-indigo-500 transition-colors flex items-center gap-1",
-                    location.pathname === "/profile" && "bg-indigo-500 font-medium"
+                    "py-2 px-3 rounded-md transition-all duration-300 ease-in-out flex items-center gap-1",
+                    location.pathname === "/profile" ? "bg-blue-50 text-blue-700 font-medium" : "hover:bg-gray-50"
                   )}
                 >
                   <User size={18} />
@@ -145,7 +145,7 @@ const Navbar = () => {
                 </Link>
                 <Button 
                   variant="outline" 
-                  className="bg-transparent border-white text-white hover:bg-white hover:text-indigo-600 w-full flex items-center justify-center gap-1"
+                  className="border-blue-600 text-blue-600 hover:bg-blue-50 transition-all duration-300 ease-in-out w-full flex items-center justify-center gap-1"
                   onClick={handleLogout}
                 >
                   <LogOut size={18} />
@@ -157,13 +157,13 @@ const Navbar = () => {
                 <Link to="/login" className="w-full">
                   <Button 
                     variant="outline" 
-                    className="bg-transparent border-white text-white hover:bg-white hover:text-indigo-600 w-full"
+                    className="border-blue-600 text-blue-600 hover:bg-blue-50 transition-all duration-300 ease-in-out w-full"
                   >
                     Login
                   </Button>
                 </Link>
                 <Link to="/signup" className="w-full">
-                  <Button className="bg-white text-indigo-600 hover:bg-gray-100 hover:text-indigo-700 w-full">
+                  <Button className="bg-blue-600 text-white hover:bg-blue-700 transition-all duration-300 ease-in-out w-full">
                     Sign Up
                   </Button>
                 </Link>
@@ -174,6 +174,6 @@ const Navbar = () => {
       )}
     </nav>
   );
-};
+}
 
 export default Navbar;

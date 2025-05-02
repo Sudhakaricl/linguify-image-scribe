@@ -37,14 +37,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-white">
+      <div className="min-h-screen flex w-full">
         {/* Mobile header with menu button - minimized but kept for mobile only */}
         {isMobile && (
           <div className="fixed top-0 left-0 w-full bg-white border-b h-12 flex items-center px-4 shadow-sm z-20">
             <Button 
               variant="ghost" 
               size="icon"
-              className="mr-2"
+              className="mr-2 transition-all duration-300 ease-in-out"
               onClick={() => setSidebarOpen(!sidebarOpen)}
             >
               <Menu className="h-6 w-6" />
@@ -53,15 +53,15 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           </div>
         )}
 
-        {/* Simple sidebar without gradients */}
+        {/* Sidebar */}
         <div 
           className={`
             ${isMobile ? 'fixed z-10 h-full' : 'relative'} 
             ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} 
-            transition-transform duration-300 ease-in-out
+            transition-all duration-300 ease-in-out
           `}
         >
-          <Sidebar className="h-full bg-white shadow-md border-r">
+          <Sidebar className="h-full bg-white shadow-sm border-r">
             {!isMobile && (
               <div className="p-4 flex items-center justify-center border-b">
                 <h1 className="text-xl font-bold">Text Extraction</h1>
@@ -78,9 +78,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                     <Link
                       to="/" 
                       onClick={handleNavigation('/')}
-                      className={`flex items-center gap-3 px-4 py-3 rounded-md transition-colors ${
+                      className={`flex items-center gap-3 px-4 py-3 rounded-md transition-all duration-300 ease-in-out ${
                         location.pathname === '/' 
-                          ? 'bg-gray-100 text-black font-medium' 
+                          ? 'bg-blue-50 text-blue-700 font-medium' 
                           : 'text-gray-700 hover:bg-gray-50'
                       }`}
                     >
@@ -98,9 +98,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                     <Link
                       to="/history" 
                       onClick={handleNavigation('/history')}
-                      className={`flex items-center gap-3 px-4 py-3 rounded-md transition-colors ${
+                      className={`flex items-center gap-3 px-4 py-3 rounded-md transition-all duration-300 ease-in-out ${
                         location.pathname === '/history' 
-                          ? 'bg-gray-100 text-black font-medium' 
+                          ? 'bg-blue-50 text-blue-700 font-medium' 
                           : 'text-gray-700 hover:bg-gray-50'
                       }`}
                     >
@@ -118,9 +118,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                     <Link
                       to="/profile" 
                       onClick={handleNavigation('/profile')}
-                      className={`flex items-center gap-3 px-4 py-3 rounded-md transition-colors ${
+                      className={`flex items-center gap-3 px-4 py-3 rounded-md transition-all duration-300 ease-in-out ${
                         location.pathname === '/profile' 
-                          ? 'bg-gray-100 text-black font-medium' 
+                          ? 'bg-blue-50 text-blue-700 font-medium' 
                           : 'text-gray-700 hover:bg-gray-50'
                       }`}
                     >
@@ -137,7 +137,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                       tooltip={isMobile ? undefined : "Logout"} 
                       className="group w-full"
                     >
-                      <div className="flex items-center gap-3 px-4 py-3 rounded-md text-gray-700 transition-colors hover:bg-gray-50">
+                      <div className="flex items-center gap-3 px-4 py-3 rounded-md text-gray-700 transition-all duration-300 ease-in-out hover:bg-gray-50">
                         <LogOut className="h-5 w-5 flex-shrink-0" />
                         <span className="font-medium">Logout</span>
                       </div>
@@ -152,14 +152,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         {/* Overlay to close sidebar on mobile */}
         {isMobile && sidebarOpen && (
           <div 
-            className="fixed inset-0 bg-black bg-opacity-50 z-0"
+            className="fixed inset-0 bg-black bg-opacity-50 z-0 transition-all duration-300 ease-in-out"
             onClick={() => setSidebarOpen(false)}
           ></div>
         )}
         
         {/* Main content */}
         <main className={`
-          flex-1 overflow-auto transition-all duration-300
+          flex-1 overflow-auto transition-all duration-300 ease-in-out
           ${isMobile ? 'pt-12' : 'p-0'}
         `}>
           <div className="p-4 md:p-6 lg:p-8">
