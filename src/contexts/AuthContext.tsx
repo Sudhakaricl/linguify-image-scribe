@@ -1,4 +1,3 @@
-
 import { createContext, useContext, useEffect, useState } from 'react';
 import { Session, User, AuthResponse } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
@@ -47,7 +46,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signIn = async (email: string, password: string) => {
     const response = await supabase.auth.signInWithPassword({ email, password });
     if (response.error) throw response.error;
-    navigate('/');
+    navigate('/'); // Ensure we redirect to root after login
     return response;
   };
 

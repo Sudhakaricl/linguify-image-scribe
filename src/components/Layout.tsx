@@ -4,6 +4,7 @@
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { ReactNode, useEffect } from "react";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface Props {
   children: ReactNode;
@@ -11,13 +12,14 @@ interface Props {
 
 export default function Layout({ children }: Props) {
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   useEffect(() => {
-    const user = localStorage.getItem("user");
+    // If no authenticated user, redirect to login
     if (!user) {
       navigate("/login");
     }
-  }, [navigate]);
+  }, [user, navigate]);
 
   const handleLogout = () => {
     localStorage.removeItem("user");
@@ -33,14 +35,14 @@ export default function Layout({ children }: Props) {
         </div>
         <div className="flex-1 flex flex-col justify-between">
           <div className="flex flex-col p-4 space-y-2">
-            <Link to="/text-extraction" className="flex items-center space-x-2 p-2 rounded hover:bg-[#26B99A] transition-colors">
-              <span className="text-[#ECF0F1] hover:text-white">Extract Text</span>
+            <Link to="/" className="flex items-center space-x-2 p-2 rounded hover:bg-[#26B99A] transition-colors">
+              <span className="text-[#ECF0F1] hover:text-white">Home</span>
             </Link>
             <Link to="/history" className="flex items-center space-x-2 p-2 rounded hover:bg-[#26B99A] transition-colors">
               <span className="text-[#ECF0F1] hover:text-white">History</span>
             </Link>
-            <Link to="/dashboard" className="flex items-center space-x-2 p-2 rounded hover:bg-[#26B99A] transition-colors">
-              <span className="text-[#ECF0F1] hover:text-white">Dashboard</span>
+            <Link to="/profile" className="flex items-center space-x-2 p-2 rounded hover:bg-[#26B99A] transition-colors">
+              <span className="text-[#ECF0F1] hover:text-white">Profile</span>
             </Link>
           </div>
           <div className="p-4 border-t border-gray-700">

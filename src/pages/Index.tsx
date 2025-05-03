@@ -7,7 +7,7 @@ const Index = () => {
   
   // Automatically redirect to the Home page
   useEffect(() => {
-    navigate('/');
+    navigate('/'); // Navigate to root route instead of trying to navigate to self
   }, [navigate]);
   
   return null;
