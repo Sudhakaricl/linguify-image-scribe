@@ -26,11 +26,13 @@ const Navbar = () => {
   };
   
   return (
-    <nav className="bg-white shadow-sm border-b">
+    <nav className="bg-white shadow-sm border-b border-app-border">
       <div className="container mx-auto px-4 py-3">
         {/* Desktop Navigation */}
         <div className="hidden md:flex justify-between items-center">
-          <Link to="/" className="text-2xl font-bold text-gray-800 transition-all duration-300 ease-in-out hover:text-blue-600">Text Extraction</Link>
+          <Link to="/" className="text-2xl font-bold text-app-secondary transition-all duration-300 ease-in-out hover:text-app-primary">
+            Text Extraction
+          </Link>
           
           <div className="flex items-center gap-6">
             {user ? (
@@ -40,8 +42,8 @@ const Navbar = () => {
                   className={cn(
                     "px-4 py-2 rounded-md transition-all duration-300 ease-in-out",
                     location.pathname === "/" 
-                      ? "bg-blue-50 text-blue-700 font-medium" 
-                      : "text-gray-700 hover:bg-gray-100"
+                      ? "bg-app-primary/10 text-app-primary font-medium" 
+                      : "text-app-text hover:bg-app-primary/10"
                   )}
                 >
                   Home
@@ -51,8 +53,8 @@ const Navbar = () => {
                   className={cn(
                     "px-4 py-2 rounded-md transition-all duration-300 ease-in-out",
                     location.pathname === "/history" 
-                      ? "bg-blue-50 text-blue-700 font-medium" 
-                      : "text-gray-700 hover:bg-gray-100"
+                      ? "bg-app-primary/10 text-app-primary font-medium" 
+                      : "text-app-text hover:bg-app-primary/10"
                   )}
                 >
                   History
@@ -62,8 +64,8 @@ const Navbar = () => {
                   className={cn(
                     "px-4 py-2 rounded-md transition-all duration-300 ease-in-out",
                     location.pathname === "/profile" 
-                      ? "bg-blue-50 text-blue-700 font-medium" 
-                      : "text-gray-700 hover:bg-gray-100"
+                      ? "bg-app-primary/10 text-app-primary font-medium" 
+                      : "text-app-text hover:bg-app-primary/10"
                   )}
                 >
                   <div className="flex items-center gap-1">
@@ -73,7 +75,7 @@ const Navbar = () => {
                 </Link>
                 <Button 
                   variant="outline" 
-                  className="border-blue-600 text-blue-600 hover:bg-blue-50 transition-all duration-300 ease-in-out flex items-center gap-1"
+                  className="border-app-primary text-app-primary hover:bg-app-primary/10 transition-all duration-300 ease-in-out flex items-center gap-1"
                   onClick={handleLogout}
                 >
                   <LogOut size={18} />
@@ -85,13 +87,13 @@ const Navbar = () => {
                 <Link to="/login">
                   <Button 
                     variant="outline" 
-                    className="border-blue-600 text-blue-600 hover:bg-blue-50 transition-all duration-300 ease-in-out mr-2"
+                    className="border-app-primary text-app-primary hover:bg-app-primary/10 transition-all duration-300 ease-in-out mr-2"
                   >
                     Login
                   </Button>
                 </Link>
                 <Link to="/signup">
-                  <Button className="bg-blue-600 text-white hover:bg-blue-700 transition-all duration-300 ease-in-out">
+                  <Button className="bg-app-primary text-white hover:bg-app-primary-hover transition-all duration-300 ease-in-out">
                     Sign Up
                   </Button>
                 </Link>
@@ -102,12 +104,12 @@ const Navbar = () => {
         
         {/* Mobile Navigation */}
         <div className="md:hidden flex justify-between items-center">
-          <Link to="/" className="text-xl font-bold text-gray-800">Text Extraction</Link>
+          <Link to="/" className="text-xl font-bold text-app-secondary">Text Extraction</Link>
           
           <Button 
             variant="ghost" 
             size="icon"
-            className="text-gray-700 hover:bg-gray-100 transition-all duration-300 ease-in-out"
+            className="text-app-text hover:bg-app-primary/10 transition-all duration-300 ease-in-out"
             onClick={toggleMenu}
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -117,7 +119,7 @@ const Navbar = () => {
       
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="md:hidden bg-white px-4 py-3 border-t border-gray-100 animate-in slide-in-from-top duration-300 shadow-md">
+        <div className="md:hidden bg-white px-4 py-3 border-t border-app-border animate-in slide-in-from-top duration-300 shadow-md">
           <div className="flex flex-col space-y-3">
             {user ? (
               <>
@@ -126,8 +128,8 @@ const Navbar = () => {
                   className={cn(
                     "py-2 px-3 rounded-md transition-all duration-300 ease-in-out",
                     location.pathname === "/" 
-                      ? "bg-blue-50 text-blue-700 font-medium" 
-                      : "hover:bg-gray-50"
+                      ? "bg-app-primary/10 text-app-primary font-medium" 
+                      : "hover:bg-app-primary/10"
                   )}
                 >
                   Home
@@ -137,8 +139,8 @@ const Navbar = () => {
                   className={cn(
                     "py-2 px-3 rounded-md transition-all duration-300 ease-in-out",
                     location.pathname === "/history" 
-                      ? "bg-blue-50 text-blue-700 font-medium" 
-                      : "hover:bg-gray-50"
+                      ? "bg-app-primary/10 text-app-primary font-medium" 
+                      : "hover:bg-app-primary/10"
                   )}
                 >
                   History
@@ -148,8 +150,8 @@ const Navbar = () => {
                   className={cn(
                     "py-2 px-3 rounded-md transition-all duration-300 ease-in-out flex items-center gap-1",
                     location.pathname === "/profile" 
-                      ? "bg-blue-50 text-blue-700 font-medium" 
-                      : "hover:bg-gray-50"
+                      ? "bg-app-primary/10 text-app-primary font-medium" 
+                      : "hover:bg-app-primary/10"
                   )}
                 >
                   <User size={18} />
@@ -157,7 +159,7 @@ const Navbar = () => {
                 </Link>
                 <Button 
                   variant="outline" 
-                  className="border-blue-600 text-blue-600 hover:bg-blue-50 transition-all duration-300 ease-in-out w-full flex items-center justify-center gap-1"
+                  className="border-app-primary text-app-primary hover:bg-app-primary/10 transition-all duration-300 ease-in-out w-full flex items-center justify-center gap-1"
                   onClick={handleLogout}
                 >
                   <LogOut size={18} />
@@ -169,13 +171,13 @@ const Navbar = () => {
                 <Link to="/login" className="w-full">
                   <Button 
                     variant="outline" 
-                    className="border-blue-600 text-blue-600 hover:bg-blue-50 transition-all duration-300 ease-in-out w-full"
+                    className="border-app-primary text-app-primary hover:bg-app-primary/10 transition-all duration-300 ease-in-out w-full"
                   >
                     Login
                   </Button>
                 </Link>
                 <Link to="/signup" className="w-full">
-                  <Button className="bg-blue-600 text-white hover:bg-blue-700 transition-all duration-300 ease-in-out w-full">
+                  <Button className="bg-app-primary text-white hover:bg-app-primary-hover transition-all duration-300 ease-in-out w-full">
                     Sign Up
                   </Button>
                 </Link>

@@ -57,26 +57,23 @@ export default {
 					foreground: 'hsl(var(--card-foreground))'
 				},
 				sidebar: {
-					DEFAULT: 'hsl(var(--sidebar-background))',
-					foreground: 'hsl(var(--sidebar-foreground))',
-					primary: 'hsl(var(--sidebar-primary))',
-					'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
-					accent: 'hsl(var(--sidebar-accent))',
-					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
-					border: 'hsl(var(--sidebar-border))',
-					ring: 'hsl(var(--sidebar-ring))'
+					DEFAULT: '#2A3F54',
+					hover: '#26B99A',
+					text: '#ECF0F1',
+					border: 'rgba(255,255,255,0.1)'
 				},
-				// Professional color scheme
-				indigo: {
-					light: '#757de8',
-					DEFAULT: '#3f51b5',
-					dark: '#002984'
+				// Updated color scheme based on sidebar
+				app: {
+					primary: '#26B99A',
+					'primary-hover': '#1C8A73',
+					secondary: '#2A3F54',
+					'secondary-hover': '#1F2F3E',
+					background: '#F7F7F7',
+					card: '#FFFFFF',
+					text: '#2C3A47',
+					'text-light': '#718093',
+					border: '#E1E4E8',
 				},
-				pink: {
-					light: '#ff5983',
-					DEFAULT: '#f50057',
-					dark: '#bb002f'
-				}
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
