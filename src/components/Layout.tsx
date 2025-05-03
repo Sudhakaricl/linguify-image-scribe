@@ -44,13 +44,11 @@ export default function Layout({ children }: Props) {
             <Link to="/profile" className="flex items-center space-x-2 p-2 rounded hover:bg-[#26B99A] transition-colors">
               <span className="text-[#ECF0F1] hover:text-white">Profile</span>
             </Link>
-          </div>
-          <div className="p-4 border-t border-gray-700">
             <button
               onClick={handleLogout}
-              className="w-full flex items-center space-x-2 p-2 rounded bg-red-500 text-white hover:bg-red-600 transition-colors"
+              className="flex items-center space-x-2 p-2 rounded hover:bg-[#26B99A] transition-colors text-left"
             >
-              <span>Logout</span>
+              <span className="text-[#ECF0F1] hover:text-white">Logout</span>
             </button>
           </div>
         </div>
