@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -57,16 +56,16 @@ export default {
 					foreground: 'hsl(var(--card-foreground))'
 				},
 				sidebar: {
-					DEFAULT: '#2A3F54',
-					hover: '#26B99A',
-					text: '#ECF0F1',
+					DEFAULT: '#1A2332', /* Updated to darker blue from the image */
+					hover: '#26B99A', /* Kept the existing hover color */
+					text: '#FFFFFF', /* Updated to white */
 					border: 'rgba(255,255,255,0.1)'
 				},
 				// Updated color scheme based on sidebar
 				app: {
 					primary: '#26B99A',
 					'primary-hover': '#1C8A73',
-					secondary: '#2A3F54',
+					secondary: '#1A2332',
 					'secondary-hover': '#1F2F3E',
 					background: '#F7F7F7',
 					card: '#FFFFFF',

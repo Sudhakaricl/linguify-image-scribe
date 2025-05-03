@@ -36,19 +36,19 @@ export default function Layout({ children }: Props) {
         <div className="flex-1 flex flex-col justify-between">
           <div className="flex flex-col p-4 space-y-2">
             <Link to="/" className="flex items-center space-x-2 p-2 rounded hover:bg-sidebar-hover transition-colors">
-              <span className="text-sidebar-text hover:text-white">Home</span>
+              <span className="text-white hover:text-white">Home</span>
             </Link>
             <Link to="/history" className="flex items-center space-x-2 p-2 rounded hover:bg-sidebar-hover transition-colors">
-              <span className="text-sidebar-text hover:text-white">History</span>
+              <span className="text-white hover:text-white">History</span>
             </Link>
             <Link to="/profile" className="flex items-center space-x-2 p-2 rounded hover:bg-sidebar-hover transition-colors">
-              <span className="text-sidebar-text hover:text-white">Profile</span>
+              <span className="text-white hover:text-white">Profile</span>
             </Link>
             <button
               onClick={handleLogout}
               className="flex items-center space-x-2 p-2 rounded hover:bg-sidebar-hover transition-colors text-left"
             >
-              <span className="text-sidebar-text hover:text-white">Logout</span>
+              <span className="text-white hover:text-white">Logout</span>
             </button>
           </div>
         </div>
