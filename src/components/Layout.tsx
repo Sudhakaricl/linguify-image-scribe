@@ -30,7 +30,7 @@ export default function Layout({ children }: Props) {
     <div className="flex min-h-screen">
       {/* Sidebar */}
       <div className="sidebar w-64 min-h-screen bg-sidebar-DEFAULT flex flex-col">
-        <div className="p-4 text-white text-2xl font-bold border-b border-sidebar-border">
+        <div className="p-4 text-white text-2xl font-bold border-b border-sidebar-border bg-sidebar-DEFAULT">
           Text Extractor
         </div>
         <div className="flex-1 flex flex-col justify-between">
