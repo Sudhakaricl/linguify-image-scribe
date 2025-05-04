@@ -35,20 +35,20 @@ export default function Layout({ children }: Props) {
         </div>
         <div className="flex-1 flex flex-col justify-between">
           <div className="flex flex-col p-4 space-y-2">
-            <Link to="/" className="flex items-center space-x-2 p-2 rounded hover:bg-sidebar-hover transition-colors">
-              <span className="text-white hover:text-white">Home</span>
+            <Link to="/" className="flex items-center space-x-2 p-2 rounded-md hover:bg-sidebar-hover transition-colors">
+              <span className="text-white">Home</span>
             </Link>
-            <Link to="/history" className="flex items-center space-x-2 p-2 rounded hover:bg-sidebar-hover transition-colors">
-              <span className="text-white hover:text-white">History</span>
+            <Link to="/history" className="flex items-center space-x-2 p-2 rounded-md hover:bg-sidebar-hover transition-colors">
+              <span className="text-white">History</span>
             </Link>
-            <Link to="/profile" className="flex items-center space-x-2 p-2 rounded hover:bg-sidebar-hover transition-colors">
-              <span className="text-white hover:text-white">Profile</span>
+            <Link to="/profile" className="flex items-center space-x-2 p-2 rounded-md hover:bg-sidebar-hover transition-colors">
+              <span className="text-white">Profile</span>
             </Link>
             <button
               onClick={handleLogout}
-              className="flex items-center space-x-2 p-2 rounded hover:bg-sidebar-hover transition-colors text-left"
+              className="flex items-center space-x-2 p-2 rounded-md hover:bg-sidebar-hover transition-colors text-left"
             >
-              <span className="text-white hover:text-white">Logout</span>
+              <span className="text-white">Logout</span>
             </button>
           </div>
         </div>
